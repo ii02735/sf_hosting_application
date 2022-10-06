@@ -2,7 +2,7 @@
 
 namespace App\Exception;
 
-class NotExistentRoleException extends \Exception
+class NotExistentParameterException extends \Exception
 {
 
 }

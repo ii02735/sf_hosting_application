@@ -3,8 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use App\Entity\UserRole;
-use App\Exceptions\NotExistentRoleException;
+use App\Exception\NotExistentParameterException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,7 +18,7 @@ class UserFixtures extends Fixture
     }
 
     /**
-     * @throws NotExistentRoleException
+     * @throws NotExistentParameterException
      */
     public function load(ObjectManager $manager): void
     {

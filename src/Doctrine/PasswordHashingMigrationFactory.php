@@ -2,17 +2,14 @@
 
 namespace App\Doctrine;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\Migrations\Version\MigrationFactory;
-use App\Doctrine\ApplyPasswordHashing;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * This class has the purpose to inject
- * an additional service when a specific interface
- * is called
+ * the UserPasswordHasherInterface service when the
+ * ApplyPasswordHashing is implemented into the Migration class
  */
 
 class PasswordHashingMigrationFactory implements MigrationFactory

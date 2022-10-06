@@ -14,7 +14,7 @@ final class Version20220920205052 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Replace INTEGER AUTOINCREMENT for PRIMARY KEY by CHAR type (for UUID creation)';
+        return 'Replaces INTEGER AUTOINCREMENT for PRIMARY KEY by CHAR type (for UUID creation)';
     }
 
     public function up(Schema $schema): void

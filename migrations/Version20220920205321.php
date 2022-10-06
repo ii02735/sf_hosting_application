@@ -20,7 +20,7 @@ final class Version20220920205321 extends AbstractMigration implements ApplyPass
 
     public function getDescription(): string
     {
-        return 'Generate an admin user';
+        return 'Generates an admin user';
     }
 
     public function up(Schema $schema): void
@@ -28,13 +28,17 @@ final class Version20220920205321 extends AbstractMigration implements ApplyPass
         $adminPassword = $this->userPasswordHasher->hashPassword(new User(),'ADMIN_PASSWORD');
         $id = Uuid::uuid4()->toString();
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("INSERT INTO `user` (id,email,password,roles) VALUES ('$id','admin@hosting.net','$adminPassword',JSON_ARRAY('ADMIN'))");
+        $this->addSql("INSERT INTO `user` (id,email,password,roles) VALUES (:id,:email,:password,JSON_ARRAY('ADMIN'))",[
+            'id' => $id,
+            'email' => 'admin@hosting.net',
+            'password' => $adminPassword
+        ]);
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("DELETE `user` WHERE email = 'admin@hosting.net'");
+        $this->addSql("DELETE `user` WHERE email = :email'",[ 'email' => 'admin@hosting.net' ]);
 
     }
 

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire de commande{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block body %}
+
+<div class="d-flex flex-column container">
+    <h2 class="mt-4 text-center">Commander un nouveau serveur</h2>
+    <div class="mx-4">
+
+        {{ form_start(form, { 'action': path('order'), 'method': 'POST' }) }}
+
+            {{ form_row(form.server) }}
+            {{ form_row(form.softwares) }}
+            {{ form_row(form.options) }}
+
+        <div class="my-4">
+            {{ form_errors(form) }}
+        </div>
+        <div class="text-center">
+            {{ form_row(form.continue) }}
+        </div>
+        {{ form_end(form) }}
+
+    </div>
+</div>
+{% endblock %}

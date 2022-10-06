@@ -3,18 +3,20 @@
 namespace App\Tests\Unit;
 
 use App\Entity\User;
-use App\Exceptions\NotExistentRoleException;
+use App\Exception\NotExistentParameterException;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
+
     /**
-     * @throws NotExistentRoleException
+     * @throws NotExistentParameterException
      */
-    public function testWhenNotExistentRoleGiven(): void
+    public function testWhenGivenRoleNotExistent(): void
     {
-        $this->expectException(NotExistentRoleException::class);
+        $this->expectException(NotExistentParameterException::class);
         $user = new User();
-        $user->setRoles(['ROLE_USER']);
+        $user->setRoles(['USER']);
     }
+
 }

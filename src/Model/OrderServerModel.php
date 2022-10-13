@@ -8,6 +8,7 @@ use App\Entity\Server;
 
 use App\Validator\OrderServer as OrderServerAssert;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @Assert\GroupSequence({"First","OrderServerModel","After"})
@@ -92,6 +93,17 @@ class OrderServerModel
     public function getServerType(): string
     {
         return $this->server->getServerType();
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context)
+    {
+        if($this->getServerType() !== 'SHARED' && count($this->softwares) > 0)
+            $context->buildViolation('Le serveur que vous avez choisi est de type {{ serverType }} : vous ne pouvez donc pas prendre de logiciel')
+            ->setParameter('{{ serverType }}', $this->getServerType())
+            ->addViolation();
     }
 
 

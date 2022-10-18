@@ -1,0 +1,45 @@
+version: "3.6"
+services:
+
+        php-server:
+               build:
+                       dockerfile: ./dockerfiles/php.Dockerfile
+                       context: .
+
+               volumes:
+
+                       - .:/app
+
+               working_dir: /app
+               environment:
+                       APP_ENV: ${APP_ENV:-dev}
+                       DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD:-root}@db/${MYSQL_DATABASE:-db_on_docker}?serverVersion=mariadb-10.7.4 
+
+               ports:
+
+                       - 80
+
+        node:
+                 image: node:lts-alpine3.15
+                 command: 
+                      - /bin/sh
+                      - -c
+                      - yarn && yarn dev --watch
+                 volumes:
+
+                         - .:/app
+
+                 working_dir: /app
+
+
+        db:
+                 image: mariadb:10.7.4
+                 volumes:
+                         - db_data:/var/lib/mysql
+                 environment:
+                         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+                         MYSQL_DATABASE: ${MYSQL_DATABASE:-db_on_docker}
+
+
+volumes:
+        db_data:

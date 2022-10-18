@@ -5,39 +5,27 @@ namespace App\Entity;
 use App\Repository\ClientServerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ClientServerRepository::class)
- */
+#[ORM\Entity(repositoryClass: ClientServerRepository::class)]
 class ClientServer
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Server::class)
-     * @ORM\JoinColumn(nullable=false, name="server_reference", referencedColumnName="reference")
-     */
-    private $server;
+    #[ORM\ManyToOne(targetEntity: Server::class)]
+    #[ORM\JoinColumn(name: "server_reference", referencedColumnName: "reference", nullable: false)]
+    private Server $server;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $state;
+    #[ORM\Column(length: 10)]
+    private string $state;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $address;
+    #[ORM\Column(length: 20)]
+    private string $address;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="clientServers")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $client;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "clientServers")]
+    #[ORM\JoinColumn(nullable: false)]
+    private User $client;
 
     public function getId(): ?int
     {

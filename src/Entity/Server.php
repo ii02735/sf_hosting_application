@@ -5,24 +5,16 @@ namespace App\Entity;
 use App\Repository\ServerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ServerRepository::class)
- */
+#[ORM\Entity(repositoryClass: ServerRepository::class)]
 class Server extends Product
 {
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
+    #[ORM\Column(length: 100)]
     private string $operatingSystem;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column]
     private int $memory;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(length: 50)]
     private string $serverType;
 
     public function __construct(string $name)

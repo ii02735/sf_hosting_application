@@ -6,13 +6,13 @@ use App\Entity\Option;
 use App\Entity\Product;
 use App\Entity\Server;
 
+use App\Entity\Software;
 use App\Validator\OrderServer as OrderServerAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @Assert\GroupSequence({"First","OrderServerModel","After"})
- * @OrderServerAssert\SoftwareCompatibility
  */
 class OrderServerModel
 {
@@ -25,7 +25,6 @@ class OrderServerModel
     /**
      * @Assert\Sequentially({
      *      @Assert\Count(max = 5, maxMessage = "Vous pouvez choisir jusqu'à 5 logiciels seulement"),
-     *      @OrderServerAssert\UniqueWebServerSoftware(groups={"After"})
      * })
      * @var Product[] $softwares
      */
@@ -98,12 +97,29 @@ class OrderServerModel
     /**
      * @Assert\Callback
      */
-    public function validate(ExecutionContextInterface $context)
+    public function validate(ExecutionContextInterface $context): void
+    {
+        $this->softwareCompatibilityValidation($context);
+        $this->uniqueWebServerSoftwareValidation($context);
+    }
+
+    private function softwareCompatibilityValidation(ExecutionContextInterface $context): void
     {
         if($this->getServerType() !== 'SHARED' && count($this->softwares) > 0)
             $context->buildViolation('Le serveur que vous avez choisi est de type {{ serverType }} : vous ne pouvez donc pas prendre de logiciel')
-            ->setParameter('{{ serverType }}', $this->getServerType())
-            ->addViolation();
+                ->setParameter('{{ serverType }}', $this->getServerType())
+                ->addViolation();
+    }
+
+    private function uniqueWebServerSoftwareValidation(ExecutionContextInterface $context): void
+    {
+        $webServerSoftwares = array_filter($this->softwares,function(Software $software){
+            return $software->getSoftwareType() === 'Web Server';
+        });
+
+        if(count($webServerSoftwares) > 1)
+            $context->buildViolation('Vous ne pouvez pas prendre plusieurs serveurs web')
+                ->addViolation();
     }
 
 

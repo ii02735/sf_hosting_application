@@ -2,50 +2,33 @@
 
 namespace App\Entity;
 
+use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Exception\NotExistentParameterException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Entity(repositoryClass=OrderRepository::class)
- * @ORM\Table(name="`order`")
- */
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
 class Order
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $client;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "orders")]
+    #[ORM\JoinColumn(nullable: false)]
+    private User $client;
 
-    /**
-     * @ORM\OneToMany(targetEntity=OrderedProduct::class, mappedBy="originOrder", orphanRemoval=true)
-     */
-    private $products;
+    #[ORM\OneToMany(mappedBy: "originOrder", targetEntity: OrderedProduct::class, orphanRemoval: true)]
+    private Collection $products;
 
-    /**
-     * @var \DateTime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
+    #[Gedmo\Timestampable(on: "create")]
+    #[ORM\Column(type: "datetime")]
     private \DateTime $created;
 
-    /**
-     * @var \DateTime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
+    #[Gedmo\Timestampable(on: "update")]
+    #[ORM\Column(type: "datetime")]
     private \DateTime $updated;
 
     public function __construct()

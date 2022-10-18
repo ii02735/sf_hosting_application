@@ -5,20 +5,14 @@ namespace App\Entity;
 use App\Repository\SoftwareRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=SoftwareRepository::class)
- */
+#[ORM\Entity(repositoryClass: SoftwareRepository::class)]
 class Software extends Product
 {
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
+    #[ORM\Column(length: 10)]
     private string $version;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
+    #[ORM\Column(length: 100)]
     private string $softwareType;
 
     public function __construct(string $name)

@@ -13,46 +13,34 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const ROLES = ["ROLE_CLIENT","ROLE_ADMIN"];
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
-     */
-    private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    private $email;
+    #[ORM\Id]
+    #[ORM\Column(type: "uuid", unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private UuidInterface $id;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
+    #[ORM\Column(length: 100, unique: true)]
+    private string $email;
+
+    #[ORM\Column(type: "json")]
+    private array $roles = [];
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
-    private $password;
+    #[ORM\Column]
+    private string $password;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="client", orphanRemoval=true)
-     */
-    private $orders;
+    #[ORM\OneToMany(mappedBy: "client", targetEntity: Order::class, orphanRemoval: true)]
+    private Collection $orders;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ClientServer::class, mappedBy="client", orphanRemoval=true)
-     */
-    private $clientServers;
+    #[ORM\OneToMany(mappedBy: "client", targetEntity: ClientServer::class, orphanRemoval: true)]
+    private Collection $clientServers;
 
     public function __construct()
     {

@@ -6,38 +6,31 @@ use App\Exception\NotExistentParameterException;
 use App\Repository\OrderedProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=OrderedProductRepository::class)
- */
+#[ORM\Entity(repositoryClass: OrderedProductRepository::class)]
 class OrderedProduct
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length=100)
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(length: 100)]
+    private string $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Product::class)
-     * @ORM\JoinColumn(nullable=false, name="product_reference", referencedColumnName="reference")
-     */
+
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "products")]
+    #[ORM\JoinColumn(name: "product_reference", referencedColumnName: "reference", nullable: false)]
     private Product $product;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
-     */
+
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "products")]
+    #[ORM\JoinColumn(nullable: false)]
     private Order $originOrder;
 
-    /**
-     * @ORM\Column(type="string", length=30)
-     */
-    private $status = 'PROCESSING';
+    #[ORM\Column(length: 30)]
+    private string $status = 'PROCESSING';
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $charge_id;
+    #[ORM\Column(length: 255)]
+    private string $stripePaymentId;
+
+    #[ORM\Column(length: 30)]
+    private string $billingMethod;
 
 
     const ORDER_STATUS = ['PAID','PROCESSING','REFUNDED'];
@@ -93,9 +86,9 @@ class OrderedProduct
         return $this->product->pricingMethod();
     }
 
-    public function getChargeId(): ?string
+    public function getStripePaymentId(): ?string
     {
-        return $this->charge_id;
+        return $this->stripePaymentId;
     }
 
     /**
@@ -121,12 +114,28 @@ class OrderedProduct
         return $this->status;
     }
 
-    public function setChargeId(string $charge_id): self
+    public function setStripePaymentId(string $stripePaymentId): self
     {
-        $this->charge_id = $charge_id;
+        $this->stripePaymentId = $stripePaymentId;
         $this->status = 'PAID';
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBillingMethod(): string
+    {
+        return $this->billingMethod;
+    }
+
+    /**
+     * @param string $billingMethod
+     */
+    public function setBillingMethod(string $billingMethod): void
+    {
+        $this->billingMethod = $billingMethod;
     }
 
 }
